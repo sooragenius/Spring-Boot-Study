@@ -9,16 +9,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Setter @Getter @Builder
+@Setter @Getter @ToString @Builder
 @AllArgsConstructor @NoArgsConstructor
 @Entity
 public class Board extends CommonModel {
     @Id @GeneratedValue
-    private int boardId;
+    private Integer boardId;
     @Column
     private String boardName;
     @Column
-    private int pageUnitSize;
+    private Integer entityPageUnitSize;
     @Column
     private String deleteYn;
     @Column
