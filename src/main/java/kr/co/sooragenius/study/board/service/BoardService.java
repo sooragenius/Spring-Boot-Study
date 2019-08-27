@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface BoardService {
     public void save(Board board);
-    public void deleteByBoardNameStartingWith(String startWith);
-    public List<Board> findByBoardNameStartingWith(String startWith);
+    public void deleteByTestYnEquals(String testYn);
+    public List<Board> findByTestYnEquals(String testYn);
 }

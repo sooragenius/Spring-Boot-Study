@@ -2,6 +2,7 @@ package kr.co.sooragenius.study.board.service;
 
 import kr.co.sooragenius.study.common.service.CommonModel;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,5 +18,9 @@ public class Board extends CommonModel {
     @Column
     private String boardName;
     @Column
+    private int pageUnitSize;
+    @Column
     private String deleteYn;
+    @Column
+    private String testYn;
 }

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board,Integer> {
-    void deleteByBoardNameStartingWith(String startWith);
-    List<Board> findByBoardNameStartingWith(String startWith);
+    void deleteByTestYnEquals(String testYn);
+    List<Board> findByTestYnEquals(String testYn);
 }

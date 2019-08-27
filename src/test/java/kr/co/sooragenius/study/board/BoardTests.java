@@ -24,27 +24,33 @@ public class BoardTests {
 
     @Test
     public void testBoardInsert() {
+        boardService.deleteByTestYnEquals("Y");
+
         String testBoardName = "Test_";
         int loopSize = 10;
-        boardService.deleteByBoardNameStartingWith(testBoardName);
 
         for(int i = 0; i<loopSize; i++) {
             Board board = Board.builder()
-                    .deleteYn("N")
                     .boardName(testBoardName+i)
+                    .deleteYn("N")
+                    .testYn("Y")
                     .build();
 
             boardService.save(board);
         }
 
-        List<Board> board = boardService.findByBoardNameStartingWith(testBoardName);
-
+        List<Board> board = boardService.findByTestYnEquals("Y");
 
         assertFalse(board.isEmpty());
         assertTrue(board.size() == loopSize);
-
         board.stream().forEach(board1 -> {
             assertTrue(board1.getBoardName().contains(testBoardName));
+            assertTrue(board1.getDeleteYn().equals("N"));
         });
+
+        boardService.deleteByTestYnEquals("Y");
+
+        assertTrue(boardService.findByTestYnEquals("Y").isEmpty());
+
     }
 }

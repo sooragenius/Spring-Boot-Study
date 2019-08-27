@@ -20,12 +20,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void deleteByBoardNameStartingWith(String startWith) {
-        boardRepository.deleteByBoardNameStartingWith(startWith);
+    public void deleteByTestYnEquals(String testYn) {
+        boardRepository.deleteByTestYnEquals(testYn);
     }
 
     @Override
-    public List<Board> findByBoardNameStartingWith(String startWith) {
-        return boardRepository.findByBoardNameStartingWith(startWith);
+    public List<Board> findByTestYnEquals(String testYn) {
+        return boardRepository.findByTestYnEquals(testYn);
     }
 }
