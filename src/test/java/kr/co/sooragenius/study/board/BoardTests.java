@@ -99,19 +99,72 @@ public class BoardTests {
 
         Board addedBoard = addBoardByURI(boardName, deleteYn, testYn);
 
-        restTemplate.delete(testAbsUrl+"/board/delete/"+addedBoard.getBoardId());
-
-        HttpStatus viewStatus = null;
-        try {
-            restTemplate.getForEntity(testAbsUrl+"/board/view/"+addedBoard.getBoardId(),String.class);
-        }catch(HttpClientErrorException ex) {
-            viewStatus = ex.getStatusCode();
-        }finally {
-            assertEquals(HttpStatus.NOT_FOUND, viewStatus);
-        }
+        boardDelete(addedBoard);
     }
+    @Test
+    public void boardValidateTest() {
+        Board nameEmpty = Board.builder()
+                .deleteYn("N")
+                .testYn("Y").build();
+
+        Board deleteEmpty = Board.builder()
+                .boardName("Hello")
+                .testYn("Y").build();
+
+        Board testEmpty = Board.builder()
+                .boardName("Hello")
+                .deleteYn("N")
+                .build();
+
+        Board normal = Board.builder()
+                .boardName("Hello")
+                .deleteYn("N")
+                .testYn("N").build();
+
+        HttpStatus nameStatus = getHttpStatusByPostForEntity(testAbsUrl+"/board/add", nameEmpty);
+        HttpStatus deleteStatus = getHttpStatusByPostForEntity(testAbsUrl+"/board/add", deleteEmpty);
+        HttpStatus testStatus = getHttpStatusByPostForEntity(testAbsUrl+"/board/add", testEmpty);
 
 
+        Board addedBoard = restTemplate.postForObject(testAbsUrl+"/board/add", normal, Board.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, nameStatus);
+        assertEquals(HttpStatus.BAD_REQUEST, deleteStatus);
+        assertEquals(HttpStatus.BAD_REQUEST, testStatus);
+
+        assertEquals(normal.getBoardName(), addedBoard.getBoardName());
+        assertEquals(normal.getDeleteYn(), addedBoard.getDeleteYn());
+        assertEquals(normal.getTestYn(), addedBoard.getTestYn());
+
+        boardDelete(addedBoard);
+    }
+    private HttpStatus getHttpStatusByPostForEntity(String url, Object object) {
+
+        try {
+            restTemplate.postForEntity(url,object,String.class);
+        }catch(HttpClientErrorException ex) {
+            return ex.getStatusCode();
+        }
+
+        return null;
+    }
+    private HttpStatus getHttpStatusByGetForEntity(String url) {
+
+        try {
+            restTemplate.getForEntity(url,String.class);
+        }catch(HttpClientErrorException ex) {
+            return ex.getStatusCode();
+        }
+
+        return null;
+    }
+    private void boardDelete(Board board) {
+        restTemplate.delete(testAbsUrl+"/board/delete/"+board.getBoardId());
+
+        HttpStatus viewStatus = getHttpStatusByGetForEntity(testAbsUrl+"/board/view/"+board.getBoardId());
+
+        assertEquals(HttpStatus.NOT_FOUND, viewStatus);
+    }
     private Board addBoardByURI(String boardName, String deleteYn, String testYn) throws Exception{
         Board board = Board.builder()
                 .boardName(boardName)

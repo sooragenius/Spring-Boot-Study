@@ -23,6 +23,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void deleteByTestYnEquals(String testYn) {
+
         boardRepository.deleteByTestYnEquals(testYn);
     }
 
@@ -39,13 +40,14 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void updateDeleteYByBoardId(Integer boardId) {
-        Board board = Board.builder()
-                .boardId(boardId)
-                .deleteYn("Y")
-                .build();
+    public void updateDeleteYByBoardId(Integer boardId) throws Exception {
+        Board foundBoard = findByBoardId(boardId);
 
-        boardRepository.save(board);
+        if(foundBoard != null) {
+            foundBoard.setDeleteYn("Y");
+
+            boardRepository.save(foundBoard);
+        }
     }
 
     @Override

@@ -6,8 +6,10 @@ import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -30,19 +32,22 @@ public class BoardWebController {
             return foundBoard;
         }
 
-        return new ResponseEntity<String>("Not Found Board", HttpStatus.NOT_FOUND);
+        return ResponseEntity.notFound().build();
     }
 
     @RequestMapping(value="/add", method=RequestMethod.POST)
-    public Board add(@RequestBody Board board) {
+    public Object add(@Valid @RequestBody Board board, Errors errors) {
+        if(errors.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
         boardService.save(board);
 
         return board;
     }
     @RequestMapping(value = "/delete/{boardId}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> delete(@PathVariable Integer boardId) {
+    public ResponseEntity<String> delete(@PathVariable Integer boardId) throws Exception {
         boardService.updateDeleteYByBoardId(boardId);
 
-        return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 }
