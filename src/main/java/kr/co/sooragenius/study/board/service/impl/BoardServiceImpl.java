@@ -5,12 +5,12 @@ import kr.co.sooragenius.study.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@Transactional(rollbackOn = Exception.class)
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class BoardServiceImpl implements BoardService {
     @Autowired

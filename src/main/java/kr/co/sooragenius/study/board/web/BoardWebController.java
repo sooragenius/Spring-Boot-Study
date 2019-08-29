@@ -1,10 +1,8 @@
-package kr.co.sooragenius.study.board.service.web;
+package kr.co.sooragenius.study.board.web;
 
 import kr.co.sooragenius.study.board.service.Board;
 import kr.co.sooragenius.study.board.service.BoardService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;

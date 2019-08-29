@@ -1,16 +1,15 @@
 package kr.co.sooragenius.study.board.service;
 
+import kr.co.sooragenius.study.board.entity.service.BoardEntity;
 import kr.co.sooragenius.study.common.service.CommonModel;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @Setter @Getter @ToString @Builder
 @AllArgsConstructor @NoArgsConstructor
@@ -30,4 +29,7 @@ public class Board extends CommonModel {
     @NotEmpty
     @Column
     private String testYn;
+    @OneToMany()
+    @JoinColumn(name = "BOARD_ID")
+    private List<BoardEntity> entities;
 }

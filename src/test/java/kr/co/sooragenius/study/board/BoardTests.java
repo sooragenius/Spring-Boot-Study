@@ -2,28 +2,28 @@ package kr.co.sooragenius.study.board;
 
 import kr.co.sooragenius.study.board.service.Board;
 import kr.co.sooragenius.study.board.service.BoardService;
-import kr.co.sooragenius.study.board.service.impl.BoardRepository;
-import org.junit.Assert;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.transaction.Transactional;
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.*;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Slf4j
 public class BoardTests {
 
 
@@ -137,6 +137,23 @@ public class BoardTests {
         assertEquals(normal.getTestYn(), addedBoard.getTestYn());
 
         boardDelete(addedBoard);
+    }
+    @Test
+    @Transactional
+    public void getBoardWithEntitys() {
+        List<Board> boards = boardService.findAll();
+        AtomicInteger entityCount = new AtomicInteger();
+        boards.stream().filter(board -> board.getEntities().size() > 0).forEach( item ->
+            item.getEntities().forEach(
+                    entity ->
+                    {
+                        log.info(entity.getTitle());
+                        entityCount.getAndIncrement();
+                        assertTrue(entity.getTitle() != null);
+                    }
+            )
+        );
+        assertTrue(entityCount.get() > 0);
     }
     private HttpStatus getHttpStatusByPostForEntity(String url, Object object) {
 
